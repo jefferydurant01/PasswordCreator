@@ -1,12 +1,10 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Generator {
     private final ArrayList<String> chain = new ArrayList<>();
-    private int symbolCount;
-    private int numberCount;
-    private int upperCaseCount;
-    private int lowerCaseCount;
+    private int symbolCount, numberCount, upperCaseCount, lowerCaseCount;
     private final char[] symbols = {'~', '`', '!', '@', '#', '$', '%',
             '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[',
             '}', ']', '|', ';', ':', '"', '<', '>', ',', '.', '?', '/'};
@@ -63,7 +61,6 @@ public class Generator {
                 }
             }
         }
-
         return chain.toString();
     }
 
@@ -76,8 +73,19 @@ public class Generator {
         for (String s : chain) {
             password.append(s);
         }
-        System.out.println("Password: " + password);
+        System.out.println("Password:" + password);
         System.out.println("Password length is " + chain.size());
         System.out.println(numberCount + " numbers, " + symbolCount + " symbols, " + upperCaseCount + " upper-case letters, " + lowerCaseCount + " lower-case letters.");
+
+        Scanner userAnswer = new Scanner(System.in);
+        System.out.println("Would you like to save the password? (Y/N)");
+        String answer = userAnswer.next();
+
+        if (answer.equalsIgnoreCase("y")){
+            ListOfPasswords list = new ListOfPasswords();
+            list.saveToFile(password.toString());
+        }
+
+
     }
 }
