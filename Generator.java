@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Generator {
     private final ArrayList<String> chain = new ArrayList<>();
-    private Random r;
+    private int symbolCount;
+    private int numberCount;
+    private int upperCaseCount;
+    private int lowerCaseCount;
     private final char[] symbols = {'~', '`', '!', '@', '#', '$', '%',
             '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '[',
             '}', ']', '|', ';', ':', '"', '<', '>', ',', '.', '?', '/'};
@@ -20,6 +22,8 @@ public class Generator {
     Generator(int length) {
         try {
             generate(length);
+            print();
+
         } catch (PasswordLength e) {
             System.out.println(e);
         }
@@ -27,14 +31,53 @@ public class Generator {
 
     public String generate(int length) throws PasswordLength {
         if (!checkLength(length)) {
-            throw new PasswordLength("Password length too short. Recommended length is 8 characters");
+            throw new PasswordLength("Password length too short. The recommended length is 8 characters");
         }
-        Scanner userInput = new Scanner(System.in);
-        //add choices
+
+        for (int i = 0; i < length; i++){
+            Random r = new Random();
+            int key = r.nextInt(5);
+            int index;
+            switch (key) {
+                case 0, 1 -> {
+                    index = r.nextInt(numbers.length);
+                    chain.add(Integer.toString(numbers[index]));
+                    numberCount++;
+                }
+                case 2 -> {
+                    index = r.nextInt(symbols.length);
+                    chain.add(Character.toString(symbols[index]));
+                    symbolCount++;
+                }
+                case 3 -> {
+                    index = r.nextInt(upperCase.length);
+                    chain.add(upperCase[index]);
+                    upperCaseCount++;
+                }
+                case 4 -> {
+                    index = r.nextInt(lowerCase.length);
+                    chain.add(lowerCase[index]);
+                    lowerCaseCount++;
+                }
+                default -> {
+                }
+            }
+        }
+
         return chain.toString();
     }
 
     public boolean checkLength(int length) {
         return (length >= 8);
+    }
+
+    public void print(){
+        StringBuilder password = new StringBuilder();
+        for (String s : chain) {
+            password.append(s);
+        }
+        System.out.println("Password: " + password);
+        System.out.println("Password length is " + chain.size());
+        System.out.println(numberCount + " numbers, " + symbolCount + " symbols, " + upperCaseCount + " upper-case letters, " + lowerCaseCount + " lower-case letters.");
     }
 }
